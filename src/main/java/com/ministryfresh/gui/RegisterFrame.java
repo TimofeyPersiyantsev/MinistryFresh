@@ -35,19 +35,15 @@ public class RegisterFrame extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        // Основная панель
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Заголовок
         JLabel titleLabel = new JLabel("Регистрация в системе", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
         mainPanel.add(titleLabel, BorderLayout.NORTH);
 
-        // Панель формы
         JPanel formPanel = new JPanel(new GridLayout(7, 2, 10, 10));
 
-        // Поля формы
         formPanel.add(new JLabel("ФИО:"));
         fullNameField = new JTextField();
         formPanel.add(fullNameField);
@@ -75,7 +71,6 @@ public class RegisterFrame extends JFrame {
 
         mainPanel.add(formPanel, BorderLayout.CENTER);
 
-        // Панель кнопок
         JPanel buttonPanel = new JPanel(new FlowLayout());
 
         registerButton = new JButton("Зарегистрироваться");
@@ -102,7 +97,6 @@ public class RegisterFrame extends JFrame {
             String confirmPassword = new String(confirmPasswordField.getPassword());
             String selectedRole = (String) roleComboBox.getSelectedItem();
 
-            // Валидация
             if (fullName.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 JOptionPane.showMessageDialog(RegisterFrame.this,
                         "Все поля должны быть заполнены!", "Ошибка", JOptionPane.ERROR_MESSAGE);
@@ -127,11 +121,9 @@ public class RegisterFrame extends JFrame {
                 return;
             }
 
-            // Преобразование роли в константу
             String roleConstant = convertRoleToConstant(selectedRole);
 
             try {
-                // Проверка уникальности username и email
                 if (userRepository.isUsernameExists(username)) {
                     JOptionPane.showMessageDialog(RegisterFrame.this,
                             "Имя пользователя уже занято!", "Ошибка", JOptionPane.ERROR_MESSAGE);
@@ -144,7 +136,6 @@ public class RegisterFrame extends JFrame {
                     return;
                 }
 
-                // Создание и сохранение пользователя
                 User newUser = new User(username, email, password, fullName, roleConstant);
                 boolean success = userRepository.registerUser(newUser);
 

@@ -3,7 +3,7 @@ package com.ministryfresh.config;
 public class DatabaseConfig {
     private static final String URL = "jdbc:postgresql://localhost:5432/ministry";
     private static final String USER = "postgres";
-    private static final String PASSWORD = "1234"; // замените на ваш пароль
+    private static final String PASSWORD = "1234";
     private static final String DRIVER = "org.postgresql.Driver";
 
     public static String getUrl() { return URL; }

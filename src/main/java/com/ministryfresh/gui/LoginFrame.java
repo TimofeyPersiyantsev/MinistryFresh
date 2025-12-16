@@ -3,6 +3,7 @@ package com.ministryfresh.gui;
 import com.ministryfresh.models.User;
 import com.ministryfresh.repositories.UserRepository;
 import com.ministryfresh.repositories.VacancyRepository;
+import com.ministryfresh.repositories.CitizenEmploymentRepository;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,14 +14,16 @@ import java.sql.SQLException;
 public class LoginFrame extends JFrame {
     private UserRepository userRepository;
     private VacancyRepository vacancyRepository;
+    private CitizenEmploymentRepository employmentRepository;
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton loginButton;
     private JButton registerButton;
 
-    public LoginFrame(UserRepository userRepository, VacancyRepository vacancyRepository) {
+    public LoginFrame(UserRepository userRepository,VacancyRepository vacancyRepository, CitizenEmploymentRepository employmentRepository) {
         this.userRepository = userRepository;
-        this.vacancyRepository = vacancyRepository; // Инициализируем
+        this.vacancyRepository = vacancyRepository;
+        this.employmentRepository = employmentRepository;
         initializeUI();
     }
 
@@ -31,16 +34,13 @@ public class LoginFrame extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        // Основная панель
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Заголовок
         JLabel titleLabel = new JLabel("Вход в систему", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         mainPanel.add(titleLabel, BorderLayout.NORTH);
 
-        // Панель формы
         JPanel formPanel = new JPanel(new GridLayout(3, 2, 10, 10));
 
         formPanel.add(new JLabel("Имя пользователя:"));
@@ -53,7 +53,6 @@ public class LoginFrame extends JFrame {
 
         mainPanel.add(formPanel, BorderLayout.CENTER);
 
-        // Панель кнопок
         JPanel buttonPanel = new JPanel(new FlowLayout());
 
         loginButton = new JButton("Войти");
@@ -69,7 +68,6 @@ public class LoginFrame extends JFrame {
 
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
-        // Обработка нажатия Enter
         getRootPane().setDefaultButton(loginButton);
 
         add(mainPanel);
@@ -81,7 +79,6 @@ public class LoginFrame extends JFrame {
             String username = usernameField.getText().trim();
             String password = new String(passwordField.getPassword());
 
-            // Валидация
             if (username.isEmpty() || password.isEmpty()) {
                 JOptionPane.showMessageDialog(LoginFrame.this,
                         "Введите имя пользователя и пароль!", "Ошибка", JOptionPane.ERROR_MESSAGE);
@@ -96,16 +93,17 @@ public class LoginFrame extends JFrame {
                             "Добро пожаловать, " + user.getFullName() + "!",
                             "Успешный вход", JOptionPane.INFORMATION_MESSAGE);
 
-                    // Открываем окно в зависимости от роли, передаем vacancyRepository
                     switch (user.getRole()) {
                         case User.ROLE_COMPANY:
                             new CompanyFrame(user, vacancyRepository).setVisible(true);
                             break;
                         case User.ROLE_EMPLOYMENT_CENTER:
-                            new EmploymentCenterFrame(user).setVisible(true);
+                            // Передаем ВСЕ три репозитория!
+                            new EmploymentCenterFrame(user, vacancyRepository, employmentRepository).setVisible(true);
                             break;
                         case User.ROLE_CITIZEN:
-                            new CitizenFrame(user, vacancyRepository).setVisible(true);
+                            // Передаем vacancyRepository И employmentRepository!
+                            new CitizenFrame(user, vacancyRepository, employmentRepository).setVisible(true);
                             break;
                         default:
                             JOptionPane.showMessageDialog(LoginFrame.this,

@@ -15,7 +15,6 @@ public class UserRepository {
         this.db = db;
     }
 
-    // Создание таблицы пользователей с ролью
     public void createUsersTable() throws SQLException {
         String sql = "CREATE TABLE IF NOT EXISTS users (" +
                 "id SERIAL PRIMARY KEY, " +
@@ -35,7 +34,6 @@ public class UserRepository {
         }
     }
 
-    // Регистрация нового пользователя с ролью
     public boolean registerUser(User user) throws SQLException {
         String sql = "INSERT INTO users (username, email, password, full_name, role) VALUES (?, ?, ?, ?, ?)";
 

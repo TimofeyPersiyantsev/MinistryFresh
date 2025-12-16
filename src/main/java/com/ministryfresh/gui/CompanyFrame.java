@@ -12,7 +12,6 @@ public class CompanyFrame extends JFrame {
     private User currentUser;
     private VacancyRepository vacancyRepository;
 
-    // Обновляем конструктор
     public CompanyFrame(User user, VacancyRepository vacancyRepository) {
         this.currentUser = user;
         this.vacancyRepository = vacancyRepository;
@@ -31,16 +30,13 @@ public class CompanyFrame extends JFrame {
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Заголовок - сделаем его более заметным
         JLabel titleLabel = new JLabel("Панель компании - Министерство труда", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 22));
         titleLabel.setForeground(new Color(0, 70, 130));
         mainPanel.add(titleLabel, BorderLayout.NORTH);
 
-        // Основной контент в центре
         JPanel centerPanel = new JPanel(new BorderLayout(10, 10));
 
-        // Левая панель - информация о компании
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
         infoPanel.setBorder(BorderFactory.createTitledBorder(
@@ -51,7 +47,6 @@ public class CompanyFrame extends JFrame {
                 new Font("Arial", Font.BOLD, 14)
         ));
 
-        // Добавим больше информации
         infoPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         JLabel nameLabel = new JLabel("Название: " + currentUser.getFullName());
@@ -79,7 +74,6 @@ public class CompanyFrame extends JFrame {
 
         infoPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
-        // Правая панель - функции
         JPanel functionsPanel = new JPanel(new GridLayout(3, 2, 15, 15));
         functionsPanel.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(Color.GRAY),
@@ -89,7 +83,6 @@ public class CompanyFrame extends JFrame {
                 new Font("Arial", Font.BOLD, 14)
         ));
 
-        // Стилизуем кнопки
         JButton addVacancyButton = createStyledButton("➕ Добавить вакансию");
         addVacancyButton.addActionListener(e -> {
             new VacancyFormFrame(vacancyRepository, currentUser).setVisible(true);
@@ -131,14 +124,12 @@ public class CompanyFrame extends JFrame {
         functionsPanel.add(profileButton);
         functionsPanel.add(helpButton);
 
-        // Создаем панель с разделением
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, infoPanel, functionsPanel);
         splitPane.setDividerLocation(300);
         splitPane.setResizeWeight(0.3);
 
         centerPanel.add(splitPane, BorderLayout.CENTER);
 
-        // Нижняя панель - кнопка выхода
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton logoutButton = createLogoutButton("🚪 Выйти");
         logoutButton.addActionListener(e -> {
@@ -148,8 +139,6 @@ public class CompanyFrame extends JFrame {
 
             if (result == JOptionPane.YES_OPTION) {
                 dispose();
-                // Здесь нужно вернуться к окну логина
-                // new LoginFrame(...).setVisible(true);
             }
         });
 
@@ -160,7 +149,6 @@ public class CompanyFrame extends JFrame {
 
         add(mainPanel);
 
-        // Показать приветственное сообщение
         SwingUtilities.invokeLater(() -> {
             JOptionPane.showMessageDialog(this,
                     "Добро пожаловать, " + currentUser.getFullName() + "!\n\n" +
@@ -170,7 +158,6 @@ public class CompanyFrame extends JFrame {
         });
     }
 
-    // Метод для создания стилизованных кнопок
     private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
         button.setFont(new Font("Arial", Font.BOLD, 12));
@@ -180,7 +167,6 @@ public class CompanyFrame extends JFrame {
         button.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // Эффект при наведении
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 button.setBackground(new Color(100, 150, 200));
@@ -193,7 +179,6 @@ public class CompanyFrame extends JFrame {
         return button;
     }
 
-    // Метод для кнопки выхода
     private JButton createLogoutButton(String text) {
         JButton button = new JButton(text);
         button.setFont(new Font("Arial", Font.BOLD, 12));
@@ -206,7 +191,6 @@ public class CompanyFrame extends JFrame {
         // Этот метод будет вызываться при необходимости
     }
 
-    // Добавляем новый метод для отображения вакансий компании
     private void showCompanyVacancies() {
         try {
             List<Vacancy> vacancies = vacancyRepository.getCompanyVacancies(currentUser.getId());
@@ -216,7 +200,6 @@ public class CompanyFrame extends JFrame {
                 return;
             }
 
-            // Создаем диалоговое окно со списком вакансий
             JDialog vacanciesDialog = new JDialog(this, "Мои вакансии", true);
             vacanciesDialog.setSize(600, 400);
             vacanciesDialog.setLocationRelativeTo(this);
@@ -248,7 +231,6 @@ public class CompanyFrame extends JFrame {
             deleteButton.addActionListener(e -> {
                 int selectedIndex = vacanciesList.getSelectedIndex();
                 if (selectedIndex != -1) {
-                    // ИСПРАВЛЕННАЯ СТРОКА
                     int confirm = JOptionPane.showConfirmDialog(vacanciesDialog,
                             "Удалить выбранную вакансию?", "Подтверждение", JOptionPane.YES_NO_OPTION);
 
@@ -258,13 +240,11 @@ public class CompanyFrame extends JFrame {
                             boolean success = vacancyRepository.deleteVacancy(selectedVacancy.getId(), currentUser.getId());
 
                             if (success) {
-                                // ИСПРАВЛЕННАЯ СТРОКА
                                 JOptionPane.showMessageDialog(vacanciesDialog, "Вакансия удалена", "Успех", JOptionPane.INFORMATION_MESSAGE);
                                 vacancies.remove(selectedIndex);
                                 listModel.remove(selectedIndex);
                             }
                         } catch (Exception ex) {
-                            // ИСПРАВЛЕННАЯ СТРОКА
                             JOptionPane.showMessageDialog(vacanciesDialog, "Ошибка: " + ex.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
                         }
                     }

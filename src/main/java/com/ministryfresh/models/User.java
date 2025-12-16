@@ -12,7 +12,6 @@ public class User {
     private LocalDateTime createdAt;
     private LocalDateTime lastLogin;
 
-    // Конструкторы
     public User() {}
 
     public User(String username, String email, String password, String fullName, String role) {
@@ -23,12 +22,10 @@ public class User {
         this.role = role;
     }
 
-    // Константы ролей
     public static final String ROLE_COMPANY = "COMPANY";
     public static final String ROLE_EMPLOYMENT_CENTER = "EMPLOYMENT_CENTER";
     public static final String ROLE_CITIZEN = "CITIZEN";
 
-    // Геттеры и сеттеры
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -53,7 +50,6 @@ public class User {
     public LocalDateTime getLastLogin() { return lastLogin; }
     public void setLastLogin(LocalDateTime lastLogin) { this.lastLogin = lastLogin; }
 
-    // Вспомогательные методы для проверки ролей
     public boolean isCompany() { return ROLE_COMPANY.equals(role); }
     public boolean isEmploymentCenter() { return ROLE_EMPLOYMENT_CENTER.equals(role); }
     public boolean isCitizen() { return ROLE_CITIZEN.equals(role); }
